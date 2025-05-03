@@ -2,6 +2,15 @@ package view;
 
 public class ConsumoView {
 
+    public void mostrarMatrizDeConsumos(double[][] matriz) {
+        for (int dia = 0; dia < matriz.length; dia++) {
+            System.out.print("Día " + (dia + 1) + ": ");
+            for (int hora = 0; hora < 24; hora++) {
+                System.out.printf("%.2f ", matriz[dia][hora]);
+            }
+            System.out.println();
+        }
+    }
     public void mostrarConsumoMinimo(double minimo) {
         System.out.println("Consumo mínimo: " + minimo + " kWh");
     }

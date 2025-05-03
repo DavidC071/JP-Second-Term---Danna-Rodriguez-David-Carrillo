@@ -6,11 +6,13 @@ public class Registrador {
     private String ciudad;
     private ConsumokWH consumo;
 
-    public Registrador(String id, String direccion, String ciudad, int dias) {
+    public Registrador(String id, String direccion, String ciudad, int diasDelMes) {
         this.id = id;
         this.direccion = direccion;
         this.ciudad = ciudad;
-        this.consumo = new ConsumokWH(dias);
+        this.consumo = new ConsumokWH(diasDelMes);
+        this.consumo.generarConsumosAleatorios();
+    
     }
 
     public String getId() {
@@ -25,15 +27,15 @@ public class Registrador {
         return ciudad;
     }
 
+    public ConsumokWH getConsumo() {
+        return consumo;
+    }
+
     public void setDireccion(String direccion) {
         this.direccion = direccion;
     }
 
     public void setCiudad(String ciudad) {
         this.ciudad = ciudad;
-    }
-
-    public ConsumokWH getConsumo() {
-        return consumo;
     }
 }

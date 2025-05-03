@@ -16,20 +16,34 @@ public class Main {
         boolean salir = false;
 
         while (!salir) {
-            System.out.println("\nMenú Principal");
-            System.out.println("1. Crear cliente");
-            System.out.println("2. Editar cliente");
-            System.out.println("3. Crear registrador para cliente");
-            System.out.println("4. Editar registrador de cliente");
-            System.out.println("5. Imprimir matriz de consumos");
-            System.out.println("6. Cambiar consumo de una hora específica");
-            System.out.println("7. Ver consumo mínimo");
-            System.out.println("8. Ver consumo máximo");
-            System.out.println("9. Ver consumo por franjas");
-            System.out.println("10. Ver consumo por días");
-            System.out.println("11. Salir");
+            System.out.println("\n===== MENÚ PRINCIPAL =====\n");
 
-            System.out.print("Opción: ");
+            System.out.println(" Gestión de Clientes:");
+            System.out.println("  1. Crear cliente");
+            System.out.println("  2. Editar cliente");
+            
+            System.out.println("\n Gestión de Registradores:");
+            System.out.println("  3. Crear registrador para cliente");
+            System.out.println("  4. Editar registrador de cliente");
+            
+            System.out.println("\n Gestión de Consumos:");
+            System.out.println("  5. Cargar consumos de todos los clientes");
+            System.out.println("  6. Cargar consumos de un cliente específico");
+            System.out.println("  7. Imprimir matriz de consumos");
+            System.out.println("  8. Cambiar consumo de una hora específica");
+            
+            System.out.println("\n Consultas de Consumo:");
+            System.out.println("  9. Ver consumo mínimo");
+            System.out.println(" 10. Ver consumo máximo");
+            System.out.println(" 11. Ver consumo por franjas");
+            System.out.println(" 12. Ver consumo por días");
+            System.out.println(" 14. Ver valor total de la factura");
+            
+            System.out.println("\n Otras opciones:");
+            System.out.println(" 13. Salir");
+            
+            System.out.print("\nSelecciona una opción: ");
+            
             int opcion = scanner.nextInt();
             scanner.nextLine(); 
 
@@ -90,10 +104,26 @@ public class Main {
                     break;
 
                 case 5:
-                    imprimirMatrizDesdeCliente(clienteController, scanner);
+                    System.out.print("Mes (1-12): ");
+                    int mesTodos = scanner.nextInt();
+                    clienteController.cargarConsumosDeTodosLosClientes(mesTodos);
+                    System.out.println("Consumos de todos los clientes cargados correctamente.");
                     break;
 
                 case 6:
+                    System.out.print("ID del cliente: ");
+                    String clienteId = scanner.nextLine();
+                    System.out.print("Mes (1-12): ");
+                    int mesCliente = scanner.nextInt();
+                    clienteController.cargarConsumosDeUnCliente(clienteId, mesCliente);
+                    System.out.println("Consumos del cliente cargados correctamente.");
+                    break;
+
+                case 7:
+                    imprimirMatrizDesdeCliente(clienteController, scanner);
+                    break;
+
+                case 8:
                     System.out.print("ID del cliente: ");
                     String cId = scanner.nextLine();
                     System.out.print("ID del registrador: ");
@@ -113,13 +143,26 @@ public class Main {
                     }
                     break;
 
-                case 7: case 8: case 9: case 10:
+                case 9: case 10: case 11: case 12:
                     procesarConsultaConsumo(clienteController, consumoController, view, scanner, opcion);
                     break;
 
-                case 11:
+                case 13:
                     salir = true;
                     System.out.println("¡Hasta pronto!");
+                    break;
+                case 14:
+                    System.out.print("ID del cliente: ");
+                    String clId = scanner.nextLine();
+                    System.out.print("ID del registrador: ");
+                    String regIdFactura = scanner.nextLine();
+                    Registrador r = buscarRegistrador(clienteController, clId, regIdFactura);
+                    if (r != null) {
+                        double totalFactura = consumoController.calcularValorFactura(r.getConsumo());
+                        System.out.println("Valor total de la factura: " + totalFactura + " COP");
+                    } else {
+                        System.out.println("Registrador no encontrado.");
+                    }
                     break;
 
                 default:
@@ -131,7 +174,16 @@ public class Main {
     }
 
 
-    public static Registrador buscarRegistrador(ClienteController clienteController, String clienteId, String registradorId) {
+    private static void imprimirMatrizDesdeCliente(ClienteController clienteController, Scanner scanner) {
+        System.out.print("ID del cliente: ");
+        String cId = scanner.nextLine();
+        System.out.print("ID del registrador: ");
+        String rId = scanner.nextLine();
+
+        clienteController.imprimirMatrizDeConsumos(cId, rId);
+    }
+
+    private static Registrador buscarRegistrador(ClienteController clienteController, String clienteId, String registradorId) {
         for (Cliente c : clienteController.getClientes()) {
             if (c.getId().equals(clienteId)) {
                 for (Registrador r : c.getRegistradores()) {
@@ -144,27 +196,7 @@ public class Main {
         return null;
     }
 
-    public static void imprimirMatrizDesdeCliente(ClienteController clienteController, Scanner scanner) {
-        System.out.print("ID del cliente: ");
-        String cId = scanner.nextLine();
-        System.out.print("ID del registrador: ");
-        String rId = scanner.nextLine();
-        Registrador reg = buscarRegistrador(clienteController, cId, rId);
-        if (reg != null) {
-            double[][] matriz = reg.getConsumo().getConsumos();
-            for (int d = 0; d < matriz.length; d++) {
-                System.out.print("Día " + (d + 1) + ": ");
-                for (int h = 0; h < 23; h++) {
-                    System.out.printf("%.2f ", matriz[d][h]);
-                }
-                System.out.println();
-            }
-        } else {
-            System.out.println("Registrador no encontrado.");
-        }
-    }
-
-    public static void procesarConsultaConsumo(ClienteController clienteController, ConsumoController consumoController, ConsumoView view, Scanner scanner, int opcion) {
+    private static void procesarConsultaConsumo(ClienteController clienteController, ConsumoController consumoController, ConsumoView view, Scanner scanner, int opcion) {
         System.out.print("ID del cliente: ");
         String cId = scanner.nextLine();
         System.out.print("ID del registrador: ");
@@ -176,16 +208,18 @@ public class Main {
         }
         ConsumokWH consumo = reg.getConsumo();
         switch (opcion) {
-            case 7:
-                view.mostrarConsumoMinimo(consumoController.hallarConsumoMinimo(consumo));
-                break;
-            case 8:
-                view.mostrarConsumoMaximo(consumoController.hallarConsumoMaximo(consumo));
-                break;
             case 9:
-                view.mostrarConsumoPorFranjas(consumoController.hallarConsumoPorFranjas(consumo));
+                double consumoMinimo = consumoController.hallarConsumoMinimo(consumo);
+                view.mostrarConsumoMinimo(consumoMinimo);
                 break;
             case 10:
+                double consumoMaximo = consumoController.hallarConsumoMaximo(consumo);
+                view.mostrarConsumoMaximo(consumoMaximo);
+                break;
+            case 11:
+                view.mostrarConsumoPorFranjas(consumoController.hallarConsumoPorFranjas(consumo));
+                break;
+            case 12:
                 view.mostrarConsumoPorDias(consumoController.hallarConsumoPorDias(consumo));
                 break;
         }

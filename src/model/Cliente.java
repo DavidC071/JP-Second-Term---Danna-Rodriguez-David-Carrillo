@@ -53,4 +53,13 @@ public class Cliente {
     public ArrayList<Registrador> getRegistradores() {
         return registradores;
     }
+
+    public Registrador buscarRegistrador(String idRegistrador) {
+      for (Registrador r : registradores) {
+        if (r.getId().equals(idRegistrador)) {
+            return r;
+        }
+      }
+      return null;
+    }
 }
