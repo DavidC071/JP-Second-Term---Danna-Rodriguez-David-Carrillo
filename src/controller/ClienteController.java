@@ -94,6 +94,6 @@ public class ClienteController { //define la clase controladora de clientes
                 System.out.println("Registrador no encontrado."); //mensaje si no encuentra registrador
             }
         } else {
-            System.out.println("Cliente no encontrado."); //mensaje si no encuentra cliente
+            System.out.println("Cliente no encontrado.");//mensaje si no encuentra client
         }
     }
