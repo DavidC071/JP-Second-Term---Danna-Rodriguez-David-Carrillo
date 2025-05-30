@@ -65,27 +65,30 @@ public class ConsumoController {  //define la clase publica consumocontroller
         return consumoDias;  //retorna el consumo total por dia
     }
 
-    public double mCalcularValorFactura(ConsumokWH consumo) {
-        double total = 0;  //incia el total de la factura
+public double[] mCalcularValorFactura(ConsumokWH consumo) {
+    if (consumo == null) return new double[]{0, 0};
 
-        if (consumo == null) return 0;  //si el objeto total es nulo retorna 0
+    double total = 0;
+    double totalKWh = 0;
+    double precioPorKWh = 1.073;
 
-        for (int d = 0; d < consumo.getTotalDias(); d++) {  //recorre los dias
-            for (int h = 0; h < 24; h++) {  //recorre las horas
-                double valor = consumo.getConsumo(d, h);  //obtiene el consumo por hora
+    for (int d = 0; d < consumo.getTotalDias(); d++) {
+        for (int h = 0; h < 24; h++) {
+            double valor = consumo.getConsumo(d, h);
+            totalKWh += valor;
 
-                if (h >= 0 && h <= 6 && valor >= 100 && valor <= 300) {  //solo si está entre 100–300 kW/h
-                    total += valor * 200;  //suma al total con precio 200 COP/kW
-                } else if (h >= 7 && h <= 17 && valor > 300 && valor <= 600) {  //solo si está entre 300–600 kW/h
-                    total += valor * 300;  //suma al total con precio 300 COP/kW
-                } else if (h >= 18 && h <= 23 && valor > 600 && valor < 1000) {  //solo si está entre 600–1000 kW/h
-                    total += valor * 500;  //suma al total con precio 500 COP/kW
-                } 
+            if (h >= 0 && h <= 6 && valor >= 100 && valor <= 300) {
+                total += valor * precioPorKWh * 2;
+            } else if (h >= 7 && h <= 17 && valor > 300 && valor <= 600) {
+                total += valor * precioPorKWh * 3;
+            } else if (h >= 18 && h <= 23 && valor > 600 && valor < 1000) {
+                total += valor * precioPorKWh * 5;
             }
         }
-
-        return total;  //retorna el valor final de la factura
     }
+
+    return new double[]{total, totalKWh};
+}
 
     public double[] mHallarConsumoMinimoConPosicion(ConsumokWH consumo) {  //retorna el consumo mínimo y su ubicación (día y hora)
         double min = Double.MAX_VALUE;  //valor mínimo inicial muy alto
@@ -123,3 +126,4 @@ public class ConsumoController {  //define la clase publica consumocontroller
         return new double[]{max, diaMax + 1, horaMax};  //retorna valores ajustando dia + 1 para evitar confusiones
     }
 }
+

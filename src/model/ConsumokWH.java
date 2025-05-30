@@ -18,6 +18,17 @@ public class ConsumokWH { //define la clase publica consumokwh
         }
     }
 
+    public void mGenerarConsumosAleatorios(int mes, String idRegistrador) {
+    long semilla = mes * 1000L + idRegistrador.hashCode(); 
+    Random random = new Random(semilla);
+
+    for (int i = 0; i < consumos.length; i++) {
+        for (int j = 0; j < consumos[i].length; j++) {
+             consumos[i][j] = random.nextInt(901) + 100;
+        }
+    }
+}
+
     public double[][] getConsumos() {
         return consumos; //retorna la matriz completa de consumos
     }

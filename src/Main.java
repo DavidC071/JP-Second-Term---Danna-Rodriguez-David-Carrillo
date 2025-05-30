@@ -80,7 +80,7 @@ public class Main {
                     System.out.println("Registrador editado correctamente.");
                     break;
 
-                case 5: //cargar consumos todos los clientes
+                case 5: //mostrar consumos todos los clientes
                     System.out.print("Mes (1-12): ");
                     int mesTodos = scanner.nextInt();
                     clienteController.mCargarConsumosDeTodosLosClientes(mesTodos);
@@ -136,8 +136,11 @@ public class Main {
                     String regIdFactura = scanner.nextLine();
                     Registrador r = clienteController.mBuscarRegistrador(clId, regIdFactura);
                     if (r != null) {
-                        double totalFactura = consumoController.mCalcularValorFactura(r.getConsumo());
-                        view.mMostrarValorFactura(totalFactura); //muestra total
+                        double[] resultados = consumoController.mCalcularValorFactura(r.getConsumo());
+                        double totalFactura = resultados[0];
+                        double totalKWh = resultados[1];
+                        view.mMostrarValorFactura(totalFactura, totalKWh);
+
                     } else {
                         view.mRegistradorNoEncontrado();
                     }

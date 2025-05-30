@@ -44,13 +44,38 @@ public class ClienteController { //define la clase controladora de clientes
         }
     }
 
-    public void mCargarConsumosDeTodosLosClientes(int mes) {
-        for (Cliente cliente : clientes) { //recorre todos los clientes
-            for (Registrador registrador : cliente.getRegistradores()) { //recorre todos los registradores del cliente
-                registrador.getConsumo().mGenerarConsumosAleatorios(); //genera consumos aleatorios
+public void mCargarConsumosDeTodosLosClientes(int mes) {
+    if (clientes.isEmpty()) {
+        System.out.println("No hay clientes registrados.");
+        return;
+    }
+
+    for (Cliente cliente : clientes) {
+        System.out.println("\nCliente: " + cliente.getNombre() + " (ID: " + cliente.getId() + ")");
+        ArrayList<Registrador> registradores = cliente.getRegistradores();
+        if (registradores.isEmpty()) {
+            System.out.println("  No tiene registradores.");
+        } else {
+            for (Registrador r : registradores) {
+                r.getConsumo().mGenerarConsumosAleatorios(mes, r.getId());
+
+
+
+                System.out.println("  Registrador ID: " + r.getId());
+                double[][] matriz = r.getConsumo().getConsumos();
+                for (int dia = 0; dia < matriz.length; dia++) {
+                    System.out.print("  Día " + (dia + 1) + ": ");
+                    for (int hora = 0; hora < 24; hora++) {
+                        System.out.printf("%4.0f", matriz[dia][hora]);
+                    }
+                    System.out.println();
+                }
+                System.out.println();
             }
         }
     }
+}
+
 
     public void mCargarConsumosDeUnCliente(String idCliente, int mes) {
         Cliente cliente = mBuscarCliente(idCliente); //busca cliente por ID

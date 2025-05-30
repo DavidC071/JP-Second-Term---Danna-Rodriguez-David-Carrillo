@@ -20,7 +20,7 @@ public class View {
         System.out.println("  4. Editar registrador de cliente");
 
         System.out.println("\n Gestión de Consumos:");
-        System.out.println("  5. Cargar consumos de todos los clientes");
+        System.out.println("  5. Imprimir consumos de todos los clientes");
         System.out.println("  6. Cargar consumos de un cliente específico");
         System.out.println("  7. Imprimir matriz de consumos");
         System.out.println("  8. Cambiar consumo de una hora específica");
@@ -49,7 +49,7 @@ public class View {
     }
 
     public void mConsumosCargadosTodos() { //mensaje cuando se cargan consumos de todos los clientes
-        System.out.println("Consumos de todos los clientes cargados correctamente.");
+        System.out.println("Se imprimieron los consumos de todos los clientes.");
     }
 
     public void mConsumosCargadosCliente() { //mensaje cuando se cargan consumos de un cliente específico
@@ -64,8 +64,9 @@ public class View {
         System.out.println("Registrador no encontrado.");
     }
 
-    public void mMostrarValorFactura(double totalFactura) { //muestra el valor total de la factura
-        System.out.println("Valor total de la factura: " + totalFactura + " COP");
+    public void mMostrarValorFactura(double totalFactura, double totalKWh) { //muestra el valor total de la factura
+        System.out.printf("Valor total de la factura: $%,.2f COP%n", totalFactura);
+         System.out.printf(" Consumo total: %.1f kWh\n", totalKWh);
     }
 
     public void mMostrarConsumoMinimo(double valor, int dia, int hora) {
