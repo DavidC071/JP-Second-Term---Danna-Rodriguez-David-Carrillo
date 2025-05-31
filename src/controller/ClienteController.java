@@ -43,39 +43,40 @@ public class ClienteController { //define la clase controladora de clientes
             }
         }
     }
-
-public void mCargarConsumosDeTodosLosClientes(int mes) {
-    if (clientes.isEmpty()) {
+    
+    public void mCargarConsumosDeTodosLosClientes(int mes) { //metodo para cargar consumos de todos los clientes en un mes especifico
+    
+    if (clientes.isEmpty()) { //verifica si no hay clientes registrados
         System.out.println("No hay clientes registrados.");
-        return;
+        return; //sale del metodo si no hay clientes
     }
 
-    for (Cliente cliente : clientes) {
-        System.out.println("\nCliente: " + cliente.getNombre() + " (ID: " + cliente.getId() + ")");
-        ArrayList<Registrador> registradores = cliente.getRegistradores();
-        if (registradores.isEmpty()) {
+    for (Cliente cliente : clientes) { //recorre la lista de clientes
+        System.out.println("\nCliente: " + cliente.getNombre() + " (ID: " + cliente.getId() + ")"); //imprime informacion basica del cliente
+        ArrayList<Registrador> registradores = cliente.getRegistradores(); //obtiene la lista de registradores del cliente
+        if (registradores.isEmpty()) { //verifica si el cliente no tiene registradores
             System.out.println("  No tiene registradores.");
         } else {
-            for (Registrador r : registradores) {
-                r.getConsumo().mGenerarConsumosAleatorios(mes, r.getId());
+            for (Registrador r : registradores) { //recorre todos los registradores del cliente
+                r.getConsumo().mGenerarConsumosAleatorios(mes, r.getId()); //genera consumos aleatorios para el mes especificado en este registrador
+                System.out.println("  Registrador ID: " + r.getId()); //imprime el ID del registrador
 
-
-
-                System.out.println("  Registrador ID: " + r.getId());
-                double[][] matriz = r.getConsumo().getConsumos();
-                for (int dia = 0; dia < matriz.length; dia++) {
-                    System.out.print("  Día " + (dia + 1) + ": ");
-                    for (int hora = 0; hora < 24; hora++) {
-                        System.out.printf("%4.0f", matriz[dia][hora]);
+                double[][] matriz = r.getConsumo().getConsumos(); //obtiene la matriz de consumos (dias x horas)
+                for (int dia = 0; dia < matriz.length; dia++) { //recorre la matriz por dias
+                    System.out.print("  Día " + (dia + 1) + ": "); //imprime el numero del dia (empezando desde 1)
+                    
+                    for (int hora = 0; hora < 24; hora++) { //recorre las 24 horas del dia y muestra el consumo
+                        System.out.printf("%4.0f", matriz[dia][hora]); //imprime el consumo de forma formateada (sin decimales)
                     }
-                    System.out.println();
+
+                    System.out.println(); //salta a la siguiente linea despues de imprimir las 24 horas
                 }
-                System.out.println();
+
+                System.out.println(); //linea en blanco para separar registradores
             }
         }
     }
 }
-
 
     public void mCargarConsumosDeUnCliente(String idCliente, int mes) {
         Cliente cliente = mBuscarCliente(idCliente); //busca cliente por ID
@@ -112,7 +113,7 @@ public void mCargarConsumosDeTodosLosClientes(int mes) {
                     for (int hora = 0; hora < 24; hora++) { //recorre horas
                         System.out.printf("%4.0f", matriz[dia][hora]); //imprime consumo
                     }
-                    System.out.println(); //salto de linea después de cada dia
+                    System.out.println(); //salto de linea despues de cada dia
                     System.out.println(); //linea en blanco entre dias
                 }
             } else {

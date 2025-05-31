@@ -11,13 +11,13 @@ public class Main {
         ConsumoController consumoController = new ConsumoController(); //controlador de consumos
         View view = new View(); //vista para mostrar datos
 
-        boolean salir = false; //bandera para controlar cuándo salir del menú
+        boolean salir = false; //bandera para controlar cuando salir del menu
 
-        while (!salir) { //bucle principal del menú
-            view.mMostrarMenuPrincipalCompleto(); //muestra el menú principal
+        while (!salir) { //bucle principal del menu
+            view.mMostrarMenuPrincipalCompleto(); //muestra el menu principal
 
             System.out.print("\nSelecciona una opción: ");
-            int opcion = scanner.nextInt(); //leer opción elegida
+            int opcion = scanner.nextInt(); //leer opcion elegida
             scanner.nextLine(); //limpiar la memoria temporal
 
             switch (opcion) {
@@ -33,7 +33,7 @@ public class Main {
                     System.out.print("Dirección: ");
                     String direccion = scanner.nextLine();
                     clienteController.mCrearCliente(id, tipoId, nombre, correo, direccion);
-                    view.mClienteCreado(); //muestra confirmación de creación de cliente
+                    view.mClienteCreado(); //muestra confirmacion de creacion de cliente
                     break;
 
                 case 2: //editar cliente
@@ -48,7 +48,7 @@ public class Main {
                     System.out.print("Nueva dirección: ");
                     String nuevaDir = scanner.nextLine();
                     clienteController.mEditarCliente(idEdit, nuevoTipo, nuevoNombre, nuevoCorreo, nuevaDir);
-                    view.mClienteEditado(); //muestra confirmación de edición de cliente
+                    view.mClienteEditado(); //muestra confirmacion de edicion de cliente
                     break;
 
                 case 3: //agregar registrador
@@ -64,7 +64,7 @@ public class Main {
                     int dias = scanner.nextInt();
                     scanner.nextLine();
                     clienteController.mAgregarRegistradorACliente(idCliente, idReg, dirReg, ciudad, dias);
-                    view.mRegistradorAgregado(); //mensaje confirmación
+                    view.mRegistradorAgregado(); //mensaje confirmacion
                     break;
 
                 case 4: //editar registrador
@@ -84,7 +84,7 @@ public class Main {
                     System.out.print("Mes (1-12): ");
                     int mesTodos = scanner.nextInt();
                     clienteController.mCargarConsumosDeTodosLosClientes(mesTodos);
-                    view.mConsumosCargadosTodos(); //mensaje confirmación
+                    view.mConsumosCargadosTodos(); //mensaje confirmacion
                     break;
 
                 case 6: //cargar consumos cliente específico
@@ -93,14 +93,14 @@ public class Main {
                     System.out.print("Mes (1-12): ");
                     int mesCliente = scanner.nextInt();
                     clienteController.mCargarConsumosDeUnCliente(clienteId, mesCliente);
-                    view.mConsumosCargadosCliente(); //mensaje confirmación
+                    view.mConsumosCargadosCliente(); //mensaje confirmacion
                     break;
 
                 case 7: //imprimir matriz consumos
                     view.mImprimirMatrizDesdeCliente(clienteController, scanner);
                     break;
 
-                case 8: //cambiar consumo hora específica
+                case 8: //cambiar consumo hora especifica
                     System.out.print("ID del cliente: ");
                     String cId = scanner.nextLine();
                     System.out.print("ID del registrador: ");
@@ -114,7 +114,7 @@ public class Main {
                         System.out.print("Nuevo consumo (kWh): ");
                         double val = scanner.nextDouble();
                         consumoController.mCambiarConsumoHora(reg.getConsumo(), d, h, val);
-                        view.mConsumoActualizado(); //mensaje de éxito
+                        view.mConsumoActualizado(); //mensaje de exito
                     } else {
                         view.mRegistradorNoEncontrado(); //error
                     }

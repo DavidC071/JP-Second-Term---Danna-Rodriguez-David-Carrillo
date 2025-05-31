@@ -2,7 +2,7 @@ package model;
 
 import java.util.ArrayList;  
 
-public class Cliente { //define la clase pública Cliente
+public class Cliente { //define la clase publica Cliente
     private String id; //almacena el ID del cliente
     private String tipoId; //""
     private String nombre; //""
@@ -16,7 +16,7 @@ public class Cliente { //define la clase pública Cliente
         this.nombre = nombre; //""
         this.correo = correo; //""
         this.direccion = direccion; //""
-        this.registradores = new ArrayList<>(); //inicia la lista de registradores vacía
+        this.registradores = new ArrayList<>(); //inicia la lista de registradores vacia
     }
 
     public String getId() {
@@ -40,7 +40,7 @@ public class Cliente { //define la clase pública Cliente
     }
 
     public void setTipoId(String tipoId) {
-        this.tipoId = tipoId; //actualiza el tipo de identificación
+        this.tipoId = tipoId; //actualiza el tipo de identificacion
     }
 
     public void setNombre(String nombre) {

@@ -8,7 +8,7 @@ import model.Registrador;
 
 public class View {
 
-    public void mMostrarMenuPrincipalCompleto() { //muestra el menú principal
+    public void mMostrarMenuPrincipalCompleto() { //muestra el menu principal
         System.out.println("\n===== MENÚ PRINCIPAL =====\n");
 
         System.out.println(" Gestión de Clientes:");
@@ -52,7 +52,7 @@ public class View {
         System.out.println("Se imprimieron los consumos de todos los clientes.");
     }
 
-    public void mConsumosCargadosCliente() { //mensaje cuando se cargan consumos de un cliente específico
+    public void mConsumosCargadosCliente() { //mensaje cuando se cargan consumos de un cliente especifico
         System.out.println("Consumos del cliente cargados correctamente.");
     }
 
@@ -71,12 +71,12 @@ public class View {
 
     public void mMostrarConsumoMinimo(double valor, int dia, int hora) {
         System.out.println("Consumo mínimo: " + valor + " kWh"); //muestra valor
-        System.out.println("Registrado el día " + dia + " a las " + hora + ":00 horas."); //muestra posición
+        System.out.println("Registrado el día " + dia + " a las " + hora + ":00 horas."); //muestra posicion
     }
 
     public void mMostrarConsumoMaximo(double valor, int dia, int hora) {
         System.out.println("Consumo máximo: " + valor + " kWh"); //muestra valor
-        System.out.println("Registrado el día " + dia + " a las " + hora + ":00 horas."); //muestra posición
+        System.out.println("Registrado el día " + dia + " a las " + hora + ":00 horas."); //muestra posicion
     }
 
     public void mMostrarConsumoPorFranjas(double[] franjas) { //muestra el consumo por franjas
@@ -86,7 +86,7 @@ public class View {
         }
     }
 
-    public void mMostrarConsumoPorDias(double[] dias) { //muestra el consumo por días
+    public void mMostrarConsumoPorDias(double[] dias) { //muestra el consumo por dias
         System.out.println("Consumo por días:");
         for (int i = 0; i < dias.length; i++) {
             System.out.println("  Día " + (i + 1) + ": " + dias[i] + " kWh");
@@ -110,12 +110,12 @@ public class View {
 
         if (reg == null) { //verifica si el registrador no fue encontrado
             mRegistradorNoEncontrado(); //muestra mensaje si no se encuentra el registrador
-            return; //sale del método si no hay registrador
+            return; //sale del metodo si no hay registrador
         }
 
         ConsumokWH consumo = reg.getConsumo(); //obtiene el objeto de consumo del registrador
 
-        switch (opcion) { //evalúa la opción seleccionada por el usuario
+        switch (opcion) { //evalua la opcion seleccionada por el usuario
             case 9: //consumo mínimo
                 double[] datosMin = consumoController.mHallarConsumoMinimoConPosicion(consumo); //obtiene valores
                 mMostrarConsumoMinimo(datosMin[0], (int) datosMin[1], (int) datosMin[2]); //muestra

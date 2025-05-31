@@ -6,7 +6,7 @@ public class ConsumokWH { //define la clase publica consumokwh
     private double[][] consumos; //matriz para almacenar consumos por dia y hora
 
     public ConsumokWH(int diasDelMes) {
-        consumos = new double[diasDelMes][24]; //inicia la matriz filas =dias, columnas =24 horas
+        consumos = new double[diasDelMes][24]; //inicia la matriz filas=dias, columnas=24 horas
     }
 
     public void mGenerarConsumosAleatorios() {
@@ -18,13 +18,15 @@ public class ConsumokWH { //define la clase publica consumokwh
         }
     }
 
-    public void mGenerarConsumosAleatorios(int mes, String idRegistrador) {
-    long semilla = mes * 1000L + idRegistrador.hashCode(); 
-    Random random = new Random(semilla);
+    public void mGenerarConsumosAleatorios(int mes, String idRegistrador) { //metodo que genera consumos aleatorios para un registrador en un mes determinado
+    //calcula una semilla unica usando el mes y el hash del ID del registrador (numero entero unico a partir del contenido de un objeto)
+    long semilla = mes * 1000L + idRegistrador.hashCode(); //esto garantiza que para un mismo mes e ID se generen siempre los mismos datos aleatorios
 
-    for (int i = 0; i < consumos.length; i++) {
-        for (int j = 0; j < consumos[i].length; j++) {
-             consumos[i][j] = random.nextInt(901) + 100;
+    Random random = new Random(semilla); //crea una instancia de random con esa semilla
+
+    for (int i = 0; i < consumos.length; i++) { //recorre la matriz de consumos (dias x horas)
+        for (int j = 0; j < consumos[i].length; j++) { //genera un valor aleatorio entre 100 y 1000 
+            consumos[i][j] = random.nextInt(901) + 100; //esto simula el consumo en kWh para una hora especifica
         }
     }
 }
@@ -34,19 +36,19 @@ public class ConsumokWH { //define la clase publica consumokwh
     }
 
     public int getTotalDias() {
-        return consumos.length; //retorna el número total de días (filas)
+        return consumos.length; //retorna el numero total de dias (filas)
     }
 
     public double getConsumo(int dia, int hora) {
-        if (dia >= 0 && dia < consumos.length && hora >= 0 && hora < 24) { // verifica que el dia y la hora estén en rango valido
+        if (dia >= 0 && dia < consumos.length && hora >= 0 && hora < 24) { //verifica que el dia y la hora esten en rango valido
             return consumos[dia][hora]; //retorna el consumo en ese dia y hora
         }
-        return 0.0; //si está fuera de rango retorna 0
+        return 0.0; //si esta fuera de rango retorna 0
     }
 
     public void setConsumo(int dia, int hora, double valor) {
-        if (dia >= 0 && dia < consumos.length && hora >= 0 && hora < 24) { //verifica que el dia y la hora estén en rango valido
-            consumos[dia][hora] = valor; //asigna un nuevo valor al consumo en ese día y hora
+        if (dia >= 0 && dia < consumos.length && hora >= 0 && hora < 24) { //verifica que el dia y la hora esten en rango valido
+            consumos[dia][hora] = valor; //asigna un nuevo valor al consumo en ese dia y hora
         }
     }
 }
