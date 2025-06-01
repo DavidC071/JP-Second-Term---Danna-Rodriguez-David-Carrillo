@@ -1,3 +1,8 @@
+
+//@Nombres: Danna Lizeth Rodriguez Bonilla / David Esteban Carrillo Acevedo
+//@Universidad: Corporacion universitaria Minuto de Dios
+//@Fecha: 31/05/2025
+
 package model; 
 
 import java.util.Random; //importa la clase random para generar numeros aleatorios

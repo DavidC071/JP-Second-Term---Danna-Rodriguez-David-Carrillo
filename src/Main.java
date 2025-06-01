@@ -1,3 +1,8 @@
+
+//@Nombres: Danna Lizeth Rodriguez Bonilla / David Esteban Carrillo Acevedo
+//@Universidad: Corporacion Universitaria Minuto de Dios
+//@Fecha: 31/05/2025
+
 import controller.ClienteController;
 import controller.ConsumoController;
 import java.util.Scanner;
