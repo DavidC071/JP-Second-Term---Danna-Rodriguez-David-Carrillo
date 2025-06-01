@@ -7,9 +7,10 @@ import view.View;
 public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in); //lector para entrada por consola
-        ClienteController clienteController = new ClienteController(); //controlador de clientes
+        View view = new View(); //instancia de la vista para mostrar menús y mensajes al usuario
+        ClienteController clienteController = new ClienteController(view); //crea el controlador de clientes y le pasa la vista para interactuar con el usuario
         ConsumoController consumoController = new ConsumoController(); //controlador de consumos
-        View view = new View(); //vista para mostrar datos
+        
 
         boolean salir = false; //bandera para controlar cuando salir del menu
 
@@ -47,9 +48,11 @@ public class Main {
                     String nuevoCorreo = scanner.nextLine();
                     System.out.print("Nueva dirección: ");
                     String nuevaDir = scanner.nextLine();
-                    clienteController.mEditarCliente(idEdit, nuevoTipo, nuevoNombre, nuevoCorreo, nuevaDir);
-                    view.mClienteEditado(); //muestra confirmacion de edicion de cliente
-                    break;
+
+                   if (clienteController.mEditarCliente(idEdit, nuevoTipo, nuevoNombre, nuevoCorreo, nuevaDir)) {
+                        view.mClienteEditado(); //muestra confirmación solo si fue exitoso
+                    }
+                   break;
 
                 case 3: //agregar registrador
                     System.out.print("ID del cliente: ");
@@ -76,8 +79,9 @@ public class Main {
                     String nuevaDirReg = scanner.nextLine();
                     System.out.print("Nueva ciudad del registrador: ");
                     String nuevaCiudad = scanner.nextLine();
-                    clienteController.mEditarRegistrador(cliId, regId, nuevaDirReg, nuevaCiudad);
-                    System.out.println("Registrador editado correctamente.");
+                   if (clienteController.mEditarRegistrador(cliId, regId, nuevaDirReg, nuevaCiudad)) {
+                       view.mRegistradorEditado(); //mensaje si fue exitoso
+                    }
                     break;
 
                 case 5: //mostrar consumos todos los clientes
@@ -124,12 +128,7 @@ public class Main {
                     view.mProcesarConsultaConsumo(clienteController, consumoController, scanner, opcion);
                     break;
 
-                case 13: //salir
-                    salir = true;
-                    System.out.println("¡Hasta pronto!");
-                    break;
-
-                case 14: //calcular valor factura
+                case 13: //calcular valor factura
                     System.out.print("ID del cliente: ");
                     String clId = scanner.nextLine();
                     System.out.print("ID del registrador: ");
@@ -137,17 +136,22 @@ public class Main {
                     Registrador r = clienteController.mBuscarRegistrador(clId, regIdFactura);
                     if (r != null) {
                         double[] resultados = consumoController.mCalcularValorFactura(r.getConsumo());
-                        double totalFactura = resultados[0];
-                        double totalKWh = resultados[1];
-                        view.mMostrarValorFactura(totalFactura, totalKWh);
+                        double totalFactura = resultados[0]; //valor en pesos
+                        double totalKWh = resultados[1]; //consumo total
+                        view.mMostrarValorFactura(totalFactura, totalKWh); //muestra resultados
 
                     } else {
-                        view.mRegistradorNoEncontrado();
+                        view.mRegistradorNoEncontrado(); //mensaje de error
                     }
                     break;
 
+                case 14: //salir
+                    salir = true;
+                    view.mMensajeDeDespedida();
+                    break;
+
                 default:
-                    System.out.println("Opción inválida.");
+                    view.mOpcionNoValida();
             }
         }
 

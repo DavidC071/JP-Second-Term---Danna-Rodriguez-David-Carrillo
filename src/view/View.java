@@ -30,10 +30,18 @@ public class View {
         System.out.println(" 10. Ver consumo máximo");
         System.out.println(" 11. Ver consumo por franjas");
         System.out.println(" 12. Ver consumo por días");
-        System.out.println(" 14. Ver valor total de la factura");
+        System.out.println(" 13. Ver valor total de la factura");
 
         System.out.println("\n Otras opciones:");
-        System.out.println(" 13. Salir");
+        System.out.println(" 14. Salir");
+    }
+
+    public void mMensajeDeDespedida () { //mensaje de salida
+        System.out.println("Hasta luego, gracias por tu tiempo");
+    }
+
+    public void mOpcionNoValida () { //mensaje de opcion no valida
+        System.out.println("No es valida tu opcion, escoje otra");
     }
 
     public void mClienteCreado() { //mensaje de cliente creado
@@ -43,9 +51,21 @@ public class View {
     public void mClienteEditado() { //mensaje de cliente editado
         System.out.println("Cliente editado exitosamente.");
     }
+    
+    public void mClienteNoEncontrado() { //mesaje de cliente no encontrado
+        System.out.println("Cliente no encontrado. Verifique el ID");
+    }
 
     public void mRegistradorAgregado() { //mensaje de registrador agregado
         System.out.println("Registrador agregado al cliente.");
+    }
+
+    public void mRegistradorEditado() { //mensaje de registrador editado
+        System.out.println("Registrador editado correctamente");
+    }
+
+    public void mRegistradorNoEncontrado() { //mensaje cuando no se encuentra un registrador
+        System.out.println("Registrador no encontrado.");
     }
 
     public void mConsumosCargadosTodos() { //mensaje cuando se cargan consumos de todos los clientes
@@ -60,10 +80,6 @@ public class View {
         System.out.println("Consumo actualizado.");
     }
 
-    public void mRegistradorNoEncontrado() { //mensaje cuando no se encuentra un registrador
-        System.out.println("Registrador no encontrado.");
-    }
-
     public void mMostrarValorFactura(double totalFactura, double totalKWh) { //muestra el valor total de la factura
         System.out.printf("Valor total de la factura: $%,.2f COP%n", totalFactura);
          System.out.printf(" Consumo total: %.1f kWh\n", totalKWh);
@@ -71,7 +87,7 @@ public class View {
 
     public void mMostrarConsumoMinimo(double valor, int dia, int hora) {
         System.out.println("Consumo mínimo: " + valor + " kWh"); //muestra valor
-        System.out.println("Registrado el día " + dia + " a las " + hora + ":00 horas."); //muestra posicion
+        System.out.println("Registrado el día " + dia + " a las " + hora +  ":00 horas."); //muestra posicion
     }
 
     public void mMostrarConsumoMaximo(double valor, int dia, int hora) {
@@ -98,7 +114,7 @@ public class View {
         String cId = scanner.nextLine(); //lee el ID del cliente ingresado
         System.out.print("ID del registrador: "); //pide al usuario el ID del registrador
         String rId = scanner.nextLine(); //lee el ID del registrador ingresado
-        clienteController.mImprimirMatrizDeConsumos(cId, rId); //llama al controlador para imprimir la matriz de consumos
+        clienteController.mMostraMatrizConsumosDeRegistrador(cId, rId); //llama al controlador para imprimir la matriz de consumos
     }
 
     public void mProcesarConsultaConsumo(ClienteController clienteController, ConsumoController consumoController, Scanner scanner, int opcion) {
@@ -115,21 +131,28 @@ public class View {
 
         ConsumokWH consumo = reg.getConsumo(); //obtiene el objeto de consumo del registrador
 
-        switch (opcion) { //evalua la opcion seleccionada por el usuario
-            case 9: //consumo mínimo
-                double[] datosMin = consumoController.mHallarConsumoMinimoConPosicion(consumo); //obtiene valores
-                mMostrarConsumoMinimo(datosMin[0], (int) datosMin[1], (int) datosMin[2]); //muestra
-                break;
-            case 10: //consumo máximo
-                double[] datosMax = consumoController.mHallarConsumoMaximoConPosicion(consumo); //obtiene valores
-                mMostrarConsumoMaximo(datosMax[0], (int) datosMax[1], (int) datosMax[2]); //muestra
-                break;
-            case 11:
-                mMostrarConsumoPorFranjas(consumoController.mHallarConsumoPorFranjas(consumo));
-                break;
-            case 12:
-                mMostrarConsumoPorDias(consumoController.mHallarConsumoPorDias(consumo));
-                break;
-        }
+        Object resultado = consumoController.procesarConsulta(opcion, consumo); //llama al metodo del controlador para procesar la opcion
+
+        if (resultado == null) { //verifica si el resultado es null
+            mOpcionNoValida(); //muestra mensaje de error
+        return; //sale del metodo
     }
+
+        switch (opcion) { //evalua la opcion para imprimir el resultado correspondiente
+            case 9: //consumo minimo
+                double[] datosMin = (double[]) resultado; //convierte el resultado a arreglo de doubles
+                mMostrarConsumoMinimo(datosMin[0], (int) datosMin[1], (int) datosMin[2]); //muestra el consumo minimo
+                break;
+            case 10: //consumo maximo
+                double[] datosMax = (double[]) resultado; //""
+                mMostrarConsumoMaximo(datosMax[0], (int) datosMax[1], (int) datosMax[2]); //""
+                break;
+            case 11: //consumo por franjas
+                mMostrarConsumoPorFranjas((double[]) resultado); //muestra el consumo por franjas
+                break;
+            case 12: //consumo por dias
+                mMostrarConsumoPorDias((double[]) resultado); //""
+                break;
+    }
+  }
 }

@@ -4,45 +4,71 @@ import java.util.ArrayList;
 import java.util.List; //importa clases para listas dinamicas (permiten almacenar elementos de manera flexible)
 import model.Cliente;
 import model.Registrador;
+import view.View;
 
 public class ClienteController { //define la clase controladora de clientes
     private List<Cliente> clientes; //lista para guardar objetos cliente
+    private View view; //referencia a la vista para mostrar mensajes o interactuar con el usuario
 
-    public ClienteController() {
-        clientes = new ArrayList<>(); //constructor inicia la lista vacia
+    public ClienteController(View view) { //constructor que recibe la vista como parametro
+        this.clientes = new ArrayList<>(); //inicializa la lista de clientes vacía
+        this.view = view; //asigna la vista recibida al atributo interno de la clase
     }
+
+
 
     public void mCrearCliente(String id, String tipoId, String nombre, String correo, String direccion) {
         clientes.add(new Cliente(id, tipoId, nombre, correo, direccion)); //crea un nuevo cliente y lo agrega a la lista
     }
 
-    public void mEditarCliente(String id, String nuevoTipoId, String nuevoNombre, String nuevoCorreo, String nuevaDireccion) {
+    public boolean mEditarCliente(String id, String nuevoTipoId, String nuevoNombre, String nuevoCorreo, String nuevaDireccion) {
         Cliente cliente = mBuscarCliente(id); //busca cliente por ID
-        if (cliente != null) {
+        if (cliente == null) { //si no se encuentra al cliente
+            view.mClienteNoEncontrado(); //muestra mensaje
+            return false; //retorna false
+            
+        } else {
             cliente.setTipoId(nuevoTipoId); //actualiza el tipo de ID
             cliente.setNombre(nuevoNombre); //""
-            cliente.setCorreo(nuevoCorreo); // ""
-            cliente.setDireccion(nuevaDireccion); // ""
+            cliente.setCorreo(nuevoCorreo); //""
+            cliente.setDireccion(nuevaDireccion); //""
+            return true; //indica que la edicion fue exitosa
+
         }
     }
 
     public void mAgregarRegistradorACliente(String idCliente, String idRegistrador, String direccion, String ciudad, int diasDelMes) {
         Cliente cliente = mBuscarCliente(idCliente); //busca cliente por ID
-        if (cliente != null) {
-            cliente.mAgregarRegistrador(new Registrador(idRegistrador, direccion, ciudad, diasDelMes));
-        } //crea y agrega un registrador al cliente
-    }
-
-    public void mEditarRegistrador(String idCliente, String idRegistrador, String nuevaDireccion, String nuevaCiudad) {
-        Cliente cliente = mBuscarCliente(idCliente); //busca cliente por ID
-        if (cliente != null) {
-            Registrador registrador = cliente.mBuscarRegistrador(idRegistrador); //busca registrador por ID dentro del cliente
-            if (registrador != null) {
-                registrador.setDireccion(nuevaDireccion); //actualiza direccion del registrador
-                registrador.setCiudad(nuevaCiudad); // ""
-            }
+        if (cliente != null) { //verifica si el cliente fue encontrado
+            if (cliente.mBuscarRegistrador(idRegistrador) != null) { //verifica si ya existe un registrador con ese ID en el cliente
+                   System.out.println("Ya existe un registrador con ese ID para este cliente."); //mensaje de error si el ID del registrador ya está en uso
+        }   else {
+            cliente.mAgregarRegistrador(new Registrador(idRegistrador, direccion, ciudad, diasDelMes)); //crea y agrega un nuevo registrador al cliente
+            view.mRegistradorAgregado(); //mensaje de exito
         }
+    } else {
+        view.mClienteNoEncontrado(); //mensaje si no se encuentra el cliente con el ID proporcionado
     }
+}
+
+   public boolean mEditarRegistrador(String idCliente, String idRegistrador, String nuevaDireccion, String nuevaCiudad) {
+    Cliente cliente = mBuscarCliente(idCliente); //busca cliente por ID
+    if (cliente == null) { //si no se encuentra el cliente
+        view.mClienteNoEncontrado(); //muestra mensaje
+        return false; //retorna false porque no se puede continuar
+    }
+       Registrador registrador = cliente.mBuscarRegistrador(idRegistrador); //busca registrador por ID dentro del cliente
+
+    if (registrador == null) {
+        view.mRegistradorNoEncontrado(); //mensaje de error si no existe el registrador
+        return false;
+    }
+    registrador.setDireccion(nuevaDireccion); //actualiza la dirección del registrador
+    registrador.setCiudad(nuevaCiudad); //""
+    return true; //indica que la edición fue exitosa
+}
+
+
     
     public void mCargarConsumosDeTodosLosClientes(int mes) { //metodo para cargar consumos de todos los clientes en un mes especifico
     
@@ -77,15 +103,16 @@ public class ClienteController { //define la clase controladora de clientes
         }
     }
 }
-
     public void mCargarConsumosDeUnCliente(String idCliente, int mes) {
-        Cliente cliente = mBuscarCliente(idCliente); //busca cliente por ID
-        if (cliente != null) {
-            for (Registrador registrador : cliente.getRegistradores()) { //recorre los registradores del cliente
-                registrador.getConsumo().mGenerarConsumosAleatorios(); //genera consumos aleatorios
-            }
+    Cliente cliente = mBuscarCliente(idCliente); //busca el cliente con el id proporcionado
+    if (cliente != null) { //verifica si el cliente fue encontrado
+        for (Registrador registrador : cliente.getRegistradores()) { //recorre todos los registradores del cliente
+            registrador.getConsumo().mGenerarConsumosAleatorios(mes, registrador.getId()); //genera consumos aleatorios para ese registrador en el mes dado
         }
+    } else {
+        view.mClienteNoEncontrado(); //muestra un mensaje si el cliente no existe
     }
+}
 
     public List<Cliente> getClientes() {
         return clientes; //devuelve la lista de clientes
@@ -100,7 +127,7 @@ public class ClienteController { //define la clase controladora de clientes
         return null; //si no lo encuentra devuelve null
     }
 
-    public void mImprimirMatrizDeConsumos(String idCliente, String idRegistrador) {
+    public void mMostraMatrizConsumosDeRegistrador(String idCliente, String idRegistrador) {
         Cliente cliente = mBuscarCliente(idCliente); //busca cliente por ID
         if (cliente != null) {
             Registrador registrador = cliente.mBuscarRegistrador(idRegistrador); //busca registrador por ID
@@ -117,10 +144,10 @@ public class ClienteController { //define la clase controladora de clientes
                     System.out.println(); //linea en blanco entre dias
                 }
             } else {
-                System.out.println("Registrador no encontrado."); //mensaje si no encuentra registrador
+                view.mRegistradorNoEncontrado(); //mensaje si no encuentra registrador
             }
         } else {
-            System.out.println("Cliente no encontrado."); //mensaje si no encuentra cliente
+             view.mClienteNoEncontrado(); //mensaje si no encuentra cliente
         }
     }
 

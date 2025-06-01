@@ -11,7 +11,6 @@ public class Registrador {
         this.direccion = direccion; //""
         this.ciudad = ciudad; //""
         this.consumo = new ConsumokWH(diasDelMes); //crea un objeto de consumo para los dias del mes
-        this.consumo.mGenerarConsumosAleatorios(); //genera consumos aleatorios para el mes
     }
 
     public String getId() { //devuelve el ID del registrador

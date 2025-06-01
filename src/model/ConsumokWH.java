@@ -46,9 +46,9 @@ public class ConsumokWH { //define la clase publica consumokwh
         return 0.0; //si esta fuera de rango retorna 0
     }
 
-    public void setConsumo(int dia, int hora, double valor) {
-        if (dia >= 0 && dia < consumos.length && hora >= 0 && hora < 24) { //verifica que el dia y la hora esten en rango valido
-            consumos[dia][hora] = valor; //asigna un nuevo valor al consumo en ese dia y hora
-        }
+   public void setConsumo(int dia, int hora, double valor) {
+    if (dia >= 0 && dia < consumos.length && hora >= 0 && hora < 24 && valor >= 0) { //verifica que el dia y la hora estén en rango valido y que el valor no sea negativo
+        consumos[dia][hora] = valor; //asigna un nuevo valor al consumo en ese dia y hora
     }
+  }
 }
